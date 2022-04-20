@@ -1,0 +1,38 @@
+extends layout 
+block contenido
+    div 
+        .container  
+            a.btn.btn-outline-primary.mt-4(href="/nueva-empresa") registar empresa
+                i.bx.bxs-plus-circle.bx-md(<='' i='')
+        div 
+            if(empresas.length)
+                table.table.tabled-bordered.table-striped.text-center.mt-2 Listado de empresas
+                    thead 
+                        tr.bg-primary.text-white 
+                            th(scope="col")
+                                | id
+                            th(scope="col")
+                                | nombre_empresa
+                            th(scope="col")
+                                | telefono_empresa 
+                            th(scope="col")
+                                | Opcion
+                    tbody
+                        each empresa in empresas
+                            tr 
+                                td=empresa.id_empresa
+                                td=empresa.nombre_empresa
+                                td=empresa.telefono_empresa
+                                td  
+                                    a.btn.btn-info.mt-2(href="#")
+                                        i.bx.bxs-face.bx-xs(<='' i='')
+                                    a.btn.btn-warning.mt-2(href='/editar-empresas/'+ `${empresa.id_empresa}`)
+                                        i.bx.bxs-pencil.bx-xs(<='' i='')
+                                    //- a.btn.btn-danger.mt-2(data-empresa-id=`${empresa.id_empresa}` id='eliminar-empresa' type='button' href='/borrar-empresas/'+ `${empresa.id_empresa}`)
+                                    //-     i.bx.bxs-trash-alt.bx-xs(<='' i='') 
+                                    //- a.btn.btn-danger.mt-2(id='eliminar-empresa' type='button' href='/borrar-empresas/'+ `${empresa.id_empresa}`)
+                                    //-     i.bx.bxs-trash-alt.bx-xs(<='' i='')
+                                    a.btn.btn-danger.mt-2(onclick=`btnEliminarEmpresa(${empresa.id_empresa})` id='eliminar-empresa' type='button')
+                                        i.bx.bxs-trash-alt.bx-xs(<='' i='')
+            else 
+                h1 No hay empresas

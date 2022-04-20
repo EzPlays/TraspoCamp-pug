@@ -1,0 +1,35 @@
+extends layout 
+block contenido
+    div 
+        .container  
+            a.btn.btn-outline-primary.mt-4(href="/nuevo-conductor") nuevo conductor
+                i.bx.bxs-plus-circle.bx-md(<='' i='')
+        div 
+            if(conductores.lenght)
+                table.table.tabled-bordered.table-striped.text-center.mt-2 Listado de conductores 
+                    thead 
+                        tr.bg-primary.text-white 
+                            th(scope="col")
+                                | nombre_conductor
+                            th(scope="col")
+                                | apellido_conductor
+                            th(scope="col")
+                                | num_celular_conductor 
+                            th(scope="col")
+                                | correo_conductor
+                            th(scope="col")
+                                | contraseña_conductor
+                            th(scope="col")
+                                | Opcion
+                    tbody
+                        each conductor in conductores 
+                            tr 
+                                td=conductor.nombre_conductor
+                                td=conductor.apellido_conductor
+                                td=conductor.num_celular_conductor 
+                                td=conductor.correo_conductor
+                                td=conductor.contraseña_conductor
+                                td  
+                                    a.btn.btn-success.mt-2(ref="#") editar 
+                                    a.btn.btn-danger.mt-2(ref="#") borrar 
+

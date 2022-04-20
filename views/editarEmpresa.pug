@@ -1,0 +1,20 @@
+extends layout 
+block  contenido
+    .contenido-principal 
+        .modal-dialog 
+        .modal-content
+            //
+            .modal-header 
+                h4#myModalLabel.modal-title #{nombrePagina}
+            .modal-body     
+                form(role='form' method='POST' action=`/editar-empresas/${empresaEditar.id_empresa}` data-toggle="validator")
+                    .form-group 
+                        label(for="nombre_empresa") Nombre Empresa
+                        input#name.form-control(type="text" placeholder="escriba su nombre" name='nombre_empresa' value=`${empresaEditar.nombre_empresa}` required)
+                    .form-group 
+                        label(for="telefono_empresa") telefono_empresa
+                        input#name.form-control(type="number" placeholder="escriba su apellido" name='telefono_empresa' value=`${empresaEditar.telefono_empresa}` required)
+                    button.btn.btn-primary(type="submit" name="Guardar") Guardar 
+            .modal-footer 
+                h5 footer 
+            p.foot.text-x5-center test

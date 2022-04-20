@@ -1,0 +1,29 @@
+extends layout 
+block  contenido
+    .contenido-principal 
+        .modal-dialog 
+        .modal-content
+            //
+            .modal-header 
+                h4#myModalLabel.modal-title #{nombrePagina}
+            .modal-body     
+                form(role='form' method='POST' action='/nuevo-conductor' data-toggle="validator")
+                    .form-group 
+                        label(for="nombre_conductor") Nombre Conductor
+                        input#name.form-control(type="text" placeholder="escriba su nombre" name='nombre_conductor' required)
+                    .form-group 
+                        label(for="apellido_conductor") Apellido Conductor
+                        input#name.form-control(type="text" placeholder="escriba su apellido" name='apellido_conductor' required)
+                    .form-group 
+                        label(for="num_celular_conductor") Num de Celular
+                        input#name.form-control(type="number" placeholder="escriba su numero de celular" name='num_celular_conductor' required)
+                    .form-group 
+                        label(for="correo_conductor") Correo
+                        input#name.form-control(type="email" placeholder="escriba su correo" name='correo_conductor' required)
+                    .form-group 
+                        label(for="contraseña_conductor") Contraseña
+                        input#name.form-control(type="password" placeholder="escriba su contraseña" name='contraseña_conductor' required)
+                    button.btn.btn-primary(type="submit" name="agregar") Agregar 
+            .modal-footer 
+                h5 footer 
+            p.foot.text-x5-center test
