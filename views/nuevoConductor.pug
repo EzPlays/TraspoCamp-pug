@@ -21,8 +21,12 @@ block  contenido
                         label(for="correo_conductor") Correo
                         input#name.form-control(type="email" placeholder="escriba su correo" name='correo_conductor' required)
                     .form-group 
-                        label(for="contraseña_conductor") Contraseña
-                        input#name.form-control(type="password" placeholder="escriba su contraseña" name='contraseña_conductor' required)
+                        label(for="empresa_id") Selecionar empresa
+                        select.form-select(aria-label='Default select example' name='empresa_id' required)
+                            option(selected='') Open this select menu
+                            option(value='') One
+                            option(value='') Two
+                            option(value='') Three
                     button.btn.btn-primary(type="submit" name="agregar") Agregar 
             .modal-footer 
                 h5 footer 

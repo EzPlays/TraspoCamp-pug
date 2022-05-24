@@ -22,3 +22,4 @@ app.use('/', routes())
 
 //le decimos en que puerto va a escuchar
 app.listen(3000)
+console.log('server corriendo en el port http://localhost:3000/');

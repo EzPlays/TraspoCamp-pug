@@ -12,12 +12,17 @@ module.exports = function () {
     //CONDUCTOR
     router.get('/nuevo-conductor', controlador.formularioProyecto)
     router.post('/nuevo-conductor', controlador.nuevoConductor)
-    router.get('/conductores', controlador.verConductores)
+    router.get('/ver-conductores', controlador.verConductores)
+
+    router.get('/borrar-conductor/:id', controlador.borrarConductor)
+    router.get('/editar-conductor/:id', controlador.editarConductor)
+    router.post('/editar-conductor/:id', controlador.actualizarConductor)
 
     //EMPRESA
     router.get('/nueva-empresa', controlador.formularioNuevaEmpresa)
     router.post('/nueva-empresa', controlador.nuevaEmpresa)
     router.get('/ver-empresa', controlador.verEmpresa)
+
     router.get('/borrar-empresas/:id', controlador.borrarEmpresa)
     router.get('/editar-empresas/:id', controlador.editarEmpresa)
     router.post('/editar-empresas/:id', controlador.actualizarEmpresa)

@@ -14,7 +14,11 @@ const Conductor = db.define('conductor', {
     apellido_conductor: DataTypes.STRING,
     num_celular_conductor: DataTypes.DOUBLE,
     correo_conductor: DataTypes.STRING,
-    contraseña_conductor: DataTypes.STRING,
+    empresa_id: {
+        type : DataTypes.INTEGER.UNSIGNED, // LLAVE FORANEA DE EMPRESA
+        allowNull : false
+    }
+    
 },
     {
         db,

@@ -1,4 +1,4 @@
-extends layout 
+ extends layout 
 block contenido
     div 
         .container  
@@ -24,14 +24,12 @@ block contenido
                                 td=empresa.nombre_empresa
                                 td=empresa.telefono_empresa
                                 td  
-                                    a.btn.btn-info.mt-2(href="#")
-                                        i.bx.bxs-face.bx-xs(<='' i='')
                                     a.btn.btn-warning.mt-2(href='/editar-empresas/'+ `${empresa.id_empresa}`)
                                         i.bx.bxs-pencil.bx-xs(<='' i='')
-                                    //- a.btn.btn-danger.mt-2(data-empresa-id=`${empresa.id_empresa}` id='eliminar-empresa' type='button' href='/borrar-empresas/'+ `${empresa.id_empresa}`)
-                                    //-     i.bx.bxs-trash-alt.bx-xs(<='' i='') 
+                                    //- metodo para borrar
                                     //- a.btn.btn-danger.mt-2(id='eliminar-empresa' type='button' href='/borrar-empresas/'+ `${empresa.id_empresa}`)
                                     //-     i.bx.bxs-trash-alt.bx-xs(<='' i='')
+                                    //- metodo que usa una alerta
                                     a.btn.btn-danger.mt-2(onclick=`btnEliminarEmpresa(${empresa.id_empresa})` id='eliminar-empresa' type='button')
                                         i.bx.bxs-trash-alt.bx-xs(<='' i='')
             else 
