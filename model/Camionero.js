@@ -2,22 +2,23 @@ const {sequelize, DataTypes, Model} = require('sequelize')
 
 const db = require('../config/connection');
 
-const Empresa = db.define('empresa', {
+const Camionero = db.define('camionero', {
 
-    id_empresa: {
+    id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    nombre_empresa: DataTypes.STRING,
-    telefono_empresa: DataTypes.DOUBLE,
+    nombre: DataTypes.STRING,
+    telefono: DataTypes.INTEGER,
+    direccion: DataTypes.STRING,
 },
     {
         db,
         sequelize: db,
-        modelName: 'Empresas',
-        tableName: 'empresa'
+        modelName: 'Camionero',
+        tableName: 'camionero'
     });
 
 
-module.exports = Empresa;
+module.exports = Camionero;

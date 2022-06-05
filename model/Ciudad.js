@@ -3,18 +3,15 @@ const { Sequelize, DataTypes, Model } = require('sequelize');
 
 const db = require('../config/connection');
 
-const Conductor = db.define('conductor', {
+const Ciudad = db.define('ciudad', {
 
-    idconductor: {
+    id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    nombre_conductor: DataTypes.STRING,
-    apellido_conductor: DataTypes.STRING,
-    num_celular_conductor: DataTypes.DOUBLE,
-    correo_conductor: DataTypes.STRING,
-    empresa_id: {
+    nombre: DataTypes.STRING,
+    paquete_id: {
         type : DataTypes.INTEGER.UNSIGNED, // LLAVE FORANEA DE EMPRESA
         allowNull : false
     }
@@ -23,10 +20,10 @@ const Conductor = db.define('conductor', {
     {
         db,
         sequelize: db,
-        modelName: 'Conductores',
-        tableName: 'conductor'
+        modelName: 'Ciudad',
+        tableName: 'ciudad'
     });
 
-    module.exports = Conductor;
+    module.exports = Ciudad;
 
 

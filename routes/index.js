@@ -8,25 +8,43 @@ module.exports = function () {
 
     //PRINCIPAL
     router.get('/', controlador.home);
+
+    //Camion
+    router.get('/camiones', controlador.formulariocamion)
+    router.post('/camiones', controlador.nuevoCamion)
+    router.get('/ver-camiones', controlador.verCamion)
+    router.get('/borrarCamion/:id', controlador.borrarCamion)
+    router.get('/editar-camion/:id', controlador.editarCamion)
+    router.post('/editar-camion/:id', controlador.actualizarCamion)
+
+    //CamiCon
+    router.get('/CamiCon',)
+    router.get('/asignar-camionero/:id',)
+    router.post('/asignar-camionero',)
     
-    //CONDUCTOR
-    router.get('/nuevo-conductor', controlador.formularioProyecto)
-    router.post('/nuevo-conductor', controlador.nuevoConductor)
-    router.get('/ver-conductores', controlador.verConductores)
+    //Camionero
+    router.get('/camionero', controlador.formulariocamionero)
+    router.post('/camionero', controlador.nuevoCamionero)
+    router.get('/ver-camioneros', controlador.verCamioneros)
+    router.get('/borrarCamionero/:id', controlador.borrarCamionero)
+    router.get('/editar-camionero/:id', controlador.editarCamionero)
+    router.post('/editar-camionero/:id', controlador.actualizarCamionero)
 
-    router.get('/borrar-conductor/:id', controlador.borrarConductor)
-    router.get('/editar-conductor/:id', controlador.editarConductor)
-    router.post('/editar-conductor/:id', controlador.actualizarConductor)
-
-    //EMPRESA
-    router.get('/nueva-empresa', controlador.formularioNuevaEmpresa)
-    router.post('/nueva-empresa', controlador.nuevaEmpresa)
-    router.get('/ver-empresa', controlador.verEmpresa)
-
-    router.get('/borrar-empresas/:id', controlador.borrarEmpresa)
-    router.get('/editar-empresas/:id', controlador.editarEmpresa)
-    router.post('/editar-empresas/:id', controlador.actualizarEmpresa)
-
+    //Ciudad
+    router.get('/ciudad', controlador.formulariociudad)
+    router.post('/ciudad', controlador.nuevaCiudad)
+    router.get('/ver-ciudades', controlador.verCiudades)
+    router.get('/borrarCiudad/:id', controlador.borrarCiudad)
+    router.get('/editar-ciudad/:id', controlador.editarCiudad)
+    router.post('/editar-ciudad/:id', controlador.actualizarCiudad)
+    
+    //Paquete
+    router.get('/paquete', controlador.formulariopaquete)
+    router.post('/paquete', controlador.nuevoPaquete)
+    router.get('/ver-paquetes', controlador.verPaquetes)
+    router.get('/borrarPaquete/:id', controlador.borrarPaquete)
+    router.get('/editar-paquete/:id', controlador.editarPaquete)
+    router.post('/editar-paquete/:id', controlador.actualizarPaquete)
 
 
     return router;

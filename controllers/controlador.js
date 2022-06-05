@@ -1,263 +1,474 @@
-const { response } = require("express");
-const Empresas = require('../model/Empresas');
-const Conductores = require('../model/Conductores');
-const {Conductor,Empresa} = require('../model/indexDB');
+const Camion = require('../model/Camion');
+const Camionero = require('../model/Camionero');
+const Ciudad = require('../model/Ciudad');
+const Paquete = require('../model/Paquete');
+const CamiCon = require('../model/CamiCon');
 
 
-
-exports.home = (req, res) => {
-    res.render('index', {
-        nombrePagina : 'MoviMaps'
-    });
-} 
-
-    const getConductor = async (req, res = response) => {
-
-        try {
-        
-            const conductor = await Conductor.findAll({
-                include: {
-                    model: Empresa,
-                    attributes: ['nombre_empresa', 'telefono_empresa']
-                }
-            });
-
-            res.json({
-                msg: "todo OK",
-                conductor
-            })
-
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({
-                msg: "error backend",
-                at: "getConductor"
-            });
-        }
-    }
-
-    exports.verConductores = async (req, res) => {
-    
-        const conductores = await Conductores.findAll({
-
+    exports.home = (req, res) => {
+        res.render('index', {
+            nombrePagina : 'TransCam'
         });
+    }
 
-        res.render('verConductor', {
-            nombrePagina: 'Lista de Conductores',
-            conductores
+
+    //CamiCon
+    exports.asignarCamionero = async(req, res) => {
+        const id = req.params.id;
+        const asignarCamioneroCamion = await Camion.findAll({
+            where: {
+                
+            }
         })
     }
 
-    exports.formularioProyecto = (req, res) => {
-        res.render('nuevoConductor', {
-            nombrePagina: 'Nuevo Conductor'
+
+    //camion
+
+    exports.formulariocamion = (req, res) => {
+        res.render('nuevoCamion', {
+            nombrePagina: 'nuevo camion'
         })
     }
 
-    exports.nuevoConductor = async (req, res) => {
+    exports.verCamion = async (req, res) => {
+        const camion = await Camion.findAll();
+
+        res.render('verCamiones', {
+            nombrePagina: 'Lista de Camiones',
+            camion
+        })
+        console.log(camion.length);
+    }
+
+    exports.nuevoCamion = async (req, res) => {
         //Enviar a consola lo que el usuario escriba
-        const { nombre_conductor } = req.body;
-        const { apellido_conductor } = req.body;
-        const { num_celular_conductor } = req.body;
-        const { correo_conductor } = req.body;
-        const { empresa_id } = req.body;
-
+        const { placa } = req.body;
+        const { modelo } = req.body;
+        const { potencia } = req.body;
+        const { tipo } = req.body;
         let errores = [];
 
-        if (!nombre_conductor) {
+        if (!placa) {
             errores.push({ 'texto': 'Agregar un numero de identificacion' })
         }
         //si hay errores
         if (errores.length > 0) {
-            res.render('nuevoConductor', {
-                nombrePagina: 'nuevo Conductor',
+            res.render('nuevoCamion', {
+                nombrePagina: 'nuevo Camion',
                 errores
             })
         } else {
-            const conductor = await Conductores.create({
-                nombre_conductor: { nombre_conductor }.nombre_conductor,
-                apellido_conductor: { apellido_conductor }.apellido_conductor,
-                num_celular_conductor: { num_celular_conductor }.num_celular_conductor,
-                correo_conductor: { correo_conductor }.correo_conductor,
-                empresa_id: { empresa_id }.empresa_id,
+            const camion = await Camion.create({
+                placa: { placa }.placa,
+                modelo: { modelo }.modelo,
+                potencia: { potencia }.potencia,
+                tipo: { tipo }.tipo
             });
-            res.redirect('/ver-conductores');
+            res.redirect('/ver-camiones');
         }
     }
 
-    exports.borrarConductor = async (req, res) => {
+    exports.borrarCamion = async (req, res) => {
         try {
-            const idconductor = req.params.id;
-            const borrarConductor = await Conductores.destroy({ where: { idconductor } })
-            console.log('Conductor borrada correctamente');
-            res.redirect('/ver-conductores')
+            const id = req.params.id;
+            const borrarCamion = await Camion.destroy({ where: { id } })
+            console.log('Camion borrado correctamente');
+            res.redirect('/ver-camiones')
         }
         catch (err) {
-            console.log('Error al intentar borrar Empresa');
-            res.redirect('/ver-conductores')
+            console.log('Error al intentar borrar Camion');
+            res.redirect('/ver-camiones')
         }
     }
 
-    exports.editarConductor = async (req, res, next) => {
-        const idconductor = req.params.id;
-        const conductorEditar = await Conductores.findOne({
+    exports.editarCamion = async (req, res, next) => {
+        const id = req.params.id;
+        const Editarcamion = await Camion.findOne({
             where: {
-                idconductor: idconductor
+                id: id
             }
         });
-        res.render('editarConductor', {
-            nombrePagina: 'Editar Conductor',
-            conductorEditar
+        res.render('editarCamion', {
+            nombrePagina: 'Editar Camion',
+            Editarcamion
         })
     }
 
-    exports.actualizarConductor = async (req, res, next) => {
-        const idconductor = req.params.id;
-        const nombre_conductor = req.body.nombre_conductor;
-        const apellido_conductor = req.body.apellido_conductor;
-        const num_celular_conductor = req.body.num_celular_conductor;
-        const correo_conductor = req.body.correo_conductor;
-        const empresa_id = req.body.empresa_id;
-
+    exports.actualizarCamion = async (req, res, next) => {
+        const id = req.params.id;
+        const placa = req.body.placa;
+        const modelo = req.body.modelo;
+        const potencia = req.body.potencia;
+        const tipo = req.body.tipo;
 
         let errores = [];
 
-        if (!nombre_conductor) {
+        if (!placa) {
             errores.push({ 'texto': 'Agregar un nombre a la empresa' })
         }
 
         //si hay errores
         if (errores.length > 0) {
-            res.render('nuevoConductor', {
-                nombrePagina: 'nuevo Conductor',
+            res.render('nuevoCamion', {
+                nombrePagina: 'nuevo Camion',
                 errores
             })
         } else {
             try {
-                await Conductores.update({
-                    nombre_conductor: nombre_conductor,
-                    apellido_conductor: apellido_conductor,
-                    num_celular_conductor: num_celular_conductor,
-                    correo_conductor: correo_conductor,
-                    empresa_id: empresa_id,
+                await Camion.update({
+                    placa: placa,
+                    modelo: modelo,
+                    potencia: potencia,
+                    tipo: tipo
                 },
                     {
                         where: {
-                            idconductor: idconductor
+                            id: id
                         }
                     });
-                console.log("Conductor actualizado correctamente");
-                res.redirect('/ver-conductores');
+                console.log("Camion actualizado correctamente");
+                res.redirect('/ver-camiones');
             }
             catch (err) {
-                console.log("error al intentar actualizar conductor");
-                res.redirect("/ver-conductores")
+                console.log("error al intentar actualizar Camion");
+                res.redirect("/ver-camiones")
             }
         }
     }
 
-    //**empresa */
+    ////////////////////////////////////////////////////////////////
 
-    exports.formularioNuevaEmpresa = (req, res) => {
-        res.render('nuevaEmpresa', {
-            nombrePagina: 'Nueva Empresa'
+    //camionero
+
+    exports.formulariocamionero = (req, res) => {
+        res.render('nuevoCamionero', {
+            nombrePagina: 'nuevo camionero'
         })
     }
 
-    exports.verEmpresa = async (req, res) => {
-        const empresas = await Empresas.findAll();
+    exports.verCamioneros = async (req, res) => {
+        const camionero = await Camionero.findAll();
 
-        res.render('verEmpresa', {
-            nombrePagina: 'Lista de Empresas',
-            empresas
+        res.render('verCamioneros', {
+            nombrePagina: 'Lista de Camioneros',
+            camionero
         })
-        console.log(empresas.length);
+        console.log(camionero.length);
     }
 
-    exports.nuevaEmpresa = async (req, res) => {
+    exports.nuevoCamionero = async (req, res) => {
         //Enviar a consola lo que el usuario escriba
-        const { nombre_empresa } = req.body;
-        const { telefono_empresa } = req.body;
+        const { nombre } = req.body;
+        const { telefono } = req.body;
+        const { direccion } = req.body;
         let errores = [];
 
-        if (!nombre_empresa) {
+        if (!nombre) {
             errores.push({ 'texto': 'Agregar un numero de identificacion' })
         }
         //si hay errores
         if (errores.length > 0) {
-            res.render('nuevaEmpresa', {
-                nombrePagina: 'nueva Empresa',
+            res.render('nuevoCamionero', {
+                nombrePagina: 'nuevo Camionero',
                 errores
             })
         } else {
-            const empresa = await Empresas.create({
-                nombre_empresa: { nombre_empresa }.nombre_empresa,
-                telefono_empresa: { telefono_empresa }.telefono_empresa,
+            const camionero = await Camionero.create({
+                nombre: { nombre }.nombre,
+                telefono: { telefono }.telefono,
+                direccion: { direccion }.direccion
             });
-            res.redirect('/ver-empresa');
+            res.redirect('/ver-camioneros');
         }
     }
 
-    exports.borrarEmpresa = async (req, res) => {
+    exports.borrarCamionero = async (req, res) => {
         try {
-            const id_empresa = req.params.id;
-            const borrarEmpresa = await Empresas.destroy({ where: { id_empresa } })
-            console.log('Empresa borrada correctamente');
-            res.redirect('/ver-empresa')
+            const id = req.params.id;
+            const borrarCamionero = await Camionero.destroy({ where: { id } })
+            console.log('Camionero borrado correctamente');
+            res.redirect('/ver-camioneros')
         }
         catch (err) {
-            console.log('Error al intentar borrar Empresa');
-            res.redirect('/ver-empresa')
+            console.log('Error al intentar borrar Camionero');
+            res.redirect('/ver-camioneros')
         }
     }
 
-    exports.editarEmpresa = async (req, res, next) => {
-        const id_empresa = req.params.id;
-        const empresaEditar = await Empresas.findOne({
+    exports.editarCamionero = async (req, res, next) => {
+        const id = req.params.id;
+        const Editarcamionero = await Camionero.findOne({
             where: {
-                id_empresa: id_empresa
+                id: id
             }
         });
-        res.render('editarEmpresa', {
-            nombrePagina: 'Editar Empresa',
-            empresaEditar
+        res.render('editarCamionero', {
+            nombrePagina: 'Editar Camionero',
+            Editarcamionero
         })
     }
 
-    exports.actualizarEmpresa = async (req, res, next) => {
-        const id_empresa = req.params.id;
-        const nombre_empresa = req.body.nombre_empresa;
-        const telefono_empresa = req.body.telefono_empresa;
+    exports.actualizarCamionero = async (req, res, next) => {
+        const id = req.params.id;
+        const nombre = req.body.nombre;
+        const telefono = req.body.telefono;
+        const direccion = req.body.direccion;
 
         let errores = [];
 
-        if (!nombre_empresa) {
+        if (!nombre) {
             errores.push({ 'texto': 'Agregar un nombre a la empresa' })
         }
 
         //si hay errores
         if (errores.length > 0) {
-            res.render('nuevaEmpresa', {
-                nombrePagina: 'nueva Empresa',
+            res.render('nuevoCamionero', {
+                nombrePagina: 'nuevo Camionero',
                 errores
             })
         } else {
             try {
-                await Empresas.update({
-                    nombre_empresa: nombre_empresa,
-                    telefono_empresa: telefono_empresa
+                await Camionero.update({
+                    nombre: nombre,
+                    telefono: telefono,
+                    direccion: direccion,
                 },
                     {
                         where: {
-                            id_empresa: id_empresa
+                            id: id
                         }
                     });
-                console.log("Empresa actualizado correctamente");
-                res.redirect('/ver-empresa');
+                console.log("Camionero actualizado correctamente");
+                res.redirect('/ver-camioneros');
             }
             catch (err) {
-                console.log("error al intentar actualizar Empresa");
-                res.redirect("/ver-empresa")
+                console.log("error al intentar actualizar Camionero");
+                res.redirect("/ver-camioneros")
+            }
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////
+
+    //Ciudad
+
+    exports.formulariociudad = (req, res) => {
+        res.render('nuevaCiudad', {
+            nombrePagina: 'nueva ciudad'
+        })
+    }
+
+    exports.verCiudades = async (req, res) => {
+        const ciudades = await Ciudad.findAll();
+
+        res.render('verCiudades', {
+            nombrePagina: 'Lista de Ciudades',
+            ciudades
+        })
+        console.log(ciudades.length);
+    }
+
+    exports.nuevaCiudad = async (req, res) => {
+        //Enviar a consola lo que el usuario escriba
+        const { nombre } = req.body;
+        const { paquete_id } = req.body;
+        let errores = [];
+
+        if (!nombre) {
+            errores.push({ 'texto': 'Agregar un numero de identificacion' })
+        }
+        //si hay errores
+        if (errores.length > 0) {
+            res.render('nuevaCiudad', {
+                nombrePagina: 'nueva Ciudad',
+                errores
+            })
+        } else {
+            const ciudad = await Ciudad.create({
+                nombre: { nombre }.nombre,
+                paquete_id: { paquete_id }.paquete_id,
+            });
+            res.redirect('/ver-ciudades');
+        }
+    }
+
+    exports.borrarCiudad = async (req, res) => {
+        try {
+            const id = req.params.id;
+            const borrarCiudad = await Ciudad.destroy({ where: { id } })
+            console.log('Ciudad borrado correctamente');
+            res.redirect('/ver-ciudades')
+        }
+        catch (err) {
+            console.log('Error al intentar borrar Ciudad');
+            res.redirect('/ver-ciudades')
+        }
+    }
+
+    exports.editarCiudad = async (req, res, next) => {
+        const id = req.params.id;
+        const Editarciudad = await Ciudad.findOne({
+            where: {
+                id: id
+            }
+        });
+        res.render('editarCiudad', {
+            nombrePagina: 'Editar ciudad',
+            Editarciudad
+        })
+    }
+
+    exports.actualizarCiudad = async (req, res, next) => {
+        const id = req.params.id;
+        const nombre = req.body.nombre;
+        const paquete_id = req.body.paquete_id;
+
+        let errores = [];
+
+        if (!nombre) {
+            errores.push({ 'texto': 'Agregar un nombre a la empresa' })
+        }
+
+        //si hay errores
+        if (errores.length > 0) {
+            res.render('nuevaCiudad', {
+                nombrePagina: 'nueva Ciudad',
+                errores
+            })
+        } else {
+            try {
+                await Ciudad.update({
+                    nombre: nombre,
+                    paquete_id: paquete_id,
+                },
+                    {
+                        where: {
+                            id: id
+                        }
+                    });
+                console.log("Ciudad actualizado correctamente");
+                res.redirect('/ver-ciudades');
+            }
+            catch (err) {
+                console.log("error al intentar actualizar Ciudad");
+                res.redirect("/ver-ciudades")
+            }
+        }
+    }
+
+    ////////////////////////    
+
+    //Paquete
+
+    exports.formulariopaquete = (req, res) => {
+        res.render('nuevoPaquete', {
+            nombrePagina: 'nuevo Paquete'
+        })
+    }
+
+    exports.verPaquetes = async (req, res) => {
+        const paquetes = await Paquete.findAll();
+
+        res.render('verPaquetes', {
+            nombrePagina: 'Lista de Paquetes',
+            paquetes
+        })
+        console.log(paquetes.length);
+    }
+
+    exports.nuevoPaquete = async (req, res) => {
+        //Enviar a consola lo que el usuario escriba
+        const { destinatario } = req.body;
+        const { descripcion } = req.body;
+        const { direccion } = req.body;
+        const { camionero_id } = req.body;
+        let errores = [];
+
+        if (!destinatario) {
+            errores.push({ 'texto': 'Agregar un numero de identificacion' })
+        }
+        //si hay errores
+        if (errores.length > 0) {
+            res.render('nuevoPaquete', {
+                nombrePagina: 'nuevo Paquete',
+                errores
+            })
+        } else {
+            const paquete = await Paquete.create({
+                destinatario: { destinatario }.destinatario,
+                descripcion: { descripcion }.descripcion,
+                direccion: { direccion }.direccion,
+                camionero_id: { camionero_id }.camionero_id,
+            });
+            res.redirect('/ver-paquetes');
+        }
+    }
+
+    exports.borrarPaquete = async (req, res) => {
+        try {
+            const id = req.params.id;
+            const borrarPaqute = await Paquete.destroy({ where: { id } })
+            console.log('Paquete borrado correctamente');
+            res.redirect('/ver-paquetes')
+        }
+        catch (err) {
+            console.log('Error al intentar borrar Paquete');
+            res.redirect('/ver-paquetes')
+        }
+    }
+
+    exports.editarPaquete = async (req, res, next) => {
+        const id = req.params.id;
+        const Editarpaquete = await Paquete.findOne({
+            where: {
+                id: id
+            }
+        });
+        res.render('editarPaquete', {
+            nombrePagina: 'Editar paquete',
+            Editarpaquete
+        })
+    }
+
+    exports.actualizarPaquete = async (req, res, next) => {
+        const id = req.params.id;
+        const destinatario = req.body.destinatario;
+        const descripcion = req.body.descripcion;
+        const direccion = req.body.direccion;
+        const camionero_id = req.body.camionero_id;
+
+        let errores = [];
+
+        if (!destinatario) {
+            errores.push({ 'texto': 'Agregar un nombre a la empresa' })
+        }
+
+        //si hay errores
+        if (errores.length > 0) {
+            res.render('nuevoPaquete', {
+                nombrePagina: 'nuevo Paquete',
+                errores
+            })
+        } else {
+            try {
+                await Paquete.update({
+                    destinatario: destinatario,
+                    descripcion: descripcion,
+                    direccion: direccion,
+                    camionero_id: camionero_id,
+                },
+                    {
+                        where: {
+                            id: id
+                        }
+                    });
+                console.log("Paquete actualizado correctamente");
+                res.redirect('/ver-paquetes');
+            }
+            catch (err) {
+                console.log("error al intentar actualizar Ciudad");
+                res.redirect("/ver-paquetes")
             }
         }
     }

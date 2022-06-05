@@ -1,0 +1,23 @@
+extends layout 
+block  contenido
+    .contenido-principal 
+        .modal-dialog 
+        .modal-content
+            //
+            .modal-header 
+                h4#myModalLabel.modal-title #{nombrePagina}
+            .modal-body     
+                form(role='form' method='POST' action=`/editar-camionero/${Editarcamionero.id}` data-toggle="validator")
+                    .form-group 
+                        label(for="nombre") nombre camionero
+                        input#name.form-control(type="text" placeholder="dijite el nombre" name='nombre' required autofocus)
+                    .form-group 
+                        label(for="telefono") telefono camionero
+                        input#name.form-control(type="number" placeholder="dijite el telefono" name='telefono' required)
+                    .form-group 
+                        label(for="direccion") direccion camionero
+                        input#name.form-control(type="text" placeholder="dijite la direccion" name='direccion' required)
+                    button.btn.btn-primary(type="submit" name="agregar") Agregar 
+            .modal-footer 
+                h5 footer 
+            p.foot.text-x5-center test

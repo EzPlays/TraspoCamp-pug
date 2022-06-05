@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes, Model } = require("sequelize");
 
-const db = new Sequelize('moviimaps', 'root', '', {
+const db = new Sequelize('transpocam', 'root', '', {
     host: 'localhost',
     dialect: 'mysql',
     port: 3306,

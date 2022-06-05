@@ -1,0 +1,42 @@
+extends layout 
+block contenido
+    div 
+        .container  
+            a.btn.btn-outline-primary.mt-4(href="/camiones") registar camion
+                i.bx.bxs-plus-circle.bx-md(<='' i='')
+        div 
+            if(camion.length)
+                table.table.tabled-bordered.table-striped.text-center.mt-2 Listado de camiones
+                    thead 
+                        tr.bg-primary.text-white 
+                            th(scope="col")
+                                | id
+                            th(scope="col")
+                                | placa
+                            th(scope="col")
+                                | modelo 
+                            th(scope="col")
+                                | potencia 
+                            th(scope="col")
+                                | tipo 
+                            th(scope="col")
+                                | Opcion
+                    tbody
+                        each camiones in camion
+                            tr
+                                td=camiones.id
+                                td=camiones.placa
+                                td=camiones.modelo
+                                td=camiones.potencia
+                                td=camiones.tipo
+                                td  
+                                    a.btn.btn-warning.mt-2(href='/editar-camion/'+ `${camiones.id}`)
+                                        i.bx.bxs-pencil.bx-xs(<='' i='')
+                                    //- metodo para borrar
+                                    //- a.btn.btn-danger.mt-2(id='eliminar-empresa' type='button' href='/borrar-empresas/'+ `${empresa.id_empresa}`)
+                                    //-     i.bx.bxs-trash-alt.bx-xs(<='' i='')
+                                    //- metodo que usa una alerta
+                                    a.btn.btn-danger.mt-2(onclick=`btnEliminarCamion(${camiones.id})` id='eliminar-camion' type='button')
+                                        i.bx.bxs-trash-alt.bx-xs(<='' i='')
+            else 
+                h1 No hay camiones

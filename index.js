@@ -18,6 +18,7 @@ app.set('views', path.join(__dirname, './views'));
 //habilitar bodyPaser para leer datos del formulario
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//habilitar las rutas
 app.use('/', routes())
 
 //le decimos en que puerto va a escuchar
