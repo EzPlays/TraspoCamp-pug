@@ -7,7 +7,7 @@ block  contenido
             .modal-header 
                 h4#myModalLabel.modal-title #{nombrePagina}
             .modal-body     
-                form(role='form' method='POST' action=`/editar-camion/${Editarcamion.id}` data-toggle="validator")
+                form(role='form' method='POST' action=`/editar-camicon/${Editarcamion.id}` data-toggle="validator")
                     .form-group 
                         label(for="placa") placa camion
                         input#name.form-control(type="text" placeholder="dijite la placa" value=`${Editarcamion.placa}` name='placa' required autofocus)

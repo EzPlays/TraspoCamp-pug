@@ -1,0 +1,36 @@
+extends layout 
+block contenido
+    div 
+        .container  
+        br
+        div 
+            if(camicons.length)
+                table.table.tabled-bordered.table-striped.text-center.mt-2 Listado de camicons
+                    thead 
+                        tr.bg-primary.text-white 
+                            th(scope="col")
+                                | id
+                            th(scope="col")
+                                | camionero
+                            th(scope="col")
+                                | camion
+                            th(scope="col")
+                                | opciones
+                            
+                    tbody
+                        each camicon in camicons
+                            tr
+                            td=camicon.id
+                            each camionero in camioneros
+                                if(camicon.camionero_id == camionero.id)    
+                                    td=camionero.nombre
+                            each camion in camiones
+                                if(camicon.camion_id == camion.id)    
+                                    td=camion.placa
+                            td  
+                                    a.btn.btn-warning.mt-2(href='/editar-camicon/'+ `${camicon.id}`)
+                                        i.bx.bxs-pencil.bx-xs(<='' i='')
+                                    a.btn.btn-danger.mt-2(onclick=`btnEliminarCamicon(${camicon.id})` id='eliminar-camicon' type='button')
+                                        i.bx.bxs-trash-alt.bx-xs(<='' i='')
+            else 
+                h1 no hay camicon

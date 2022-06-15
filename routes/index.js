@@ -16,11 +16,6 @@ module.exports = function () {
     router.get('/borrarCamion/:id', controlador.borrarCamion)
     router.get('/editar-camion/:id', controlador.editarCamion)
     router.post('/editar-camion/:id', controlador.actualizarCamion)
-
-    //CamiCon
-    router.get('/CamiCon',)
-    router.get('/asignar-camionero/:id',)
-    router.post('/asignar-camionero',)
     
     //Camionero
     router.get('/camionero', controlador.formulariocamionero)
@@ -41,6 +36,13 @@ module.exports = function () {
     router.get('/editar-paquete/:id', controlador.editarPaquete)
     router.post('/editar-paquete/:id', controlador.actualizarPaquete)
 
+    //CamiCon
+    router.get('/camicon', controlador.formularioCamicon)
+    router.post('/camicon', controlador.nuevoCamicon)
+    router.get('/ver-camicon', controlador.verCamicon)
+    router.get('/borrarCamicon/:id', controlador.borrarCamicon)
+    router.get('/editar-camicon/:id', controlador.editarCamicon)
+    router.post('/editar-camicon/:id', controlador.actualizarCamicon)
 
     return router;
     

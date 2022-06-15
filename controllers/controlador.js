@@ -13,17 +13,6 @@ const CamiCon = require('../model/CamiCon');
     }
 
 
-    //CamiCon
-    exports.asignarCamionero = async(req, res) => {
-        const id = req.params.id;
-        const asignarCamioneroCamion = await Camion.findAll({
-            where: {
-                
-            }
-        })
-    }
-
-
     //camion
 
     exports.formulariocamion = (req, res) => {
@@ -394,6 +383,125 @@ const CamiCon = require('../model/CamiCon');
             catch (err) {
                 console.log("error al intentar actualizar Ciudad");
                 res.redirect("/ver-paquetes")
+            }
+        }
+    }
+
+    //CamiCon
+    exports.formularioCamicon = async (req, res) => {
+        const camiones = await Camion.findAll();
+        const camioneros = await Camionero.findAll();
+
+        res.render('nuevoCamicon', {
+            nombrePagina: 'nuevo Camionero_camion',
+            camiones,
+            camioneros
+        })
+    }
+
+    exports.verCamicon = async (req, res) => {
+        const camicons = await CamiCon.findAll();
+        const camiones = await Camion.findAll();
+        const camioneros = await Camionero.findAll();
+
+        res.render('verCamicon', {
+            nombrePagina: 'Lista de Camionero_camion',
+            camicons,
+            camiones,
+            camioneros
+        });
+    }
+
+    exports.nuevoCamicon = async (req, res) => {
+        //Enviar a consola lo que el usuario escriba
+        const { camionero_id } = req.body;
+        const { camion_id } = req.body;
+        console.log("*******************************************************",camionero_id);
+
+        let errores = [];
+
+        if (!camionero_id) {
+            errores.push({ 'texto': 'Agregar un numero de identificacion' })
+        }
+        //si hay errores
+        if (errores.length > 0) {
+            res.render('nuevoCamicon', {
+                nombrePagina: 'nuevo Camionero_camion',
+                errores
+            })
+        } else {
+            const camicon = await CamiCon.create({
+                camionero_id: { camionero_id }.camionero_id,
+                camion_id: { camion_id }.camion_id    
+            });
+            res.redirect('/ver-camicon');
+        }
+    }
+
+    exports.borrarCamicon = async (req, res) => {
+        try {
+            const id = req.params.id;
+            const borrarCamicon = await CamiCon.destroy({ where: { id } })
+            console.log('Camionero_camion borrado correctamente');
+            res.redirect('/ver-camicon')
+        }
+        catch (err) {
+            console.log('Error al intentar borrar Camionero_camion');
+            res.redirect('/ver-camicon')
+        }
+    }
+
+    exports.editarCamicon = async (req, res, next) => {
+        const id = req.params.id;
+        const camiones = await Camion.findAll();
+        const camioneros = await Camionero.findAll();
+        const Editarcamicon = await CamiCon.findOne({
+            where: {
+                id: id
+            }
+        });
+        res.render('editarCamicon', {
+            nombrePagina: 'Editar camicon',
+            camiones,
+            camioneros,
+            Editarcamicon
+        })
+    }
+
+    exports.actualizarCamicon = async (req, res, next) => {
+        const id = req.params.id;
+        const camionero_id = req.body.camionero_id;
+        const camion_id = req.body.camion_id;
+
+        let errores = [];
+
+        if (!camionero_id) {
+            errores.push({ 'texto': 'Agregar un nombre a la empresa' })
+        }
+
+        //si hay errores
+        if (errores.length > 0) {
+            res.render('nuevoCamicon', {
+                nombrePagina: 'nuevo Camionero_camion',
+                errores
+            })
+        } else {
+            try {
+                await CamiCon.update({
+                    camionero_id: camionero_id,
+                    camion_id: camion_id
+                },
+                    {
+                        where: {
+                            id: id
+                        }
+                    });
+                console.log("Camionero_camion actualizado correctamente");
+                res.redirect('/ver-camicon');
+            }
+            catch (err) {
+                console.log("error al intentar actualizar Camionero_camion");
+                res.redirect("/ver-camicon")
             }
         }
     }

@@ -1,0 +1,37 @@
+extends layout
+block contenido
+    .contenido-principal
+        .modal-dialog
+        .modal-content
+            // Modal Header
+            .modal-header
+                h4#myModalLabel.modal-title #{nombrePagina}
+            // Modal Body
+            .modal-body
+                form(role='form' method='POST' action='/camicon' data-toggle = "validator")
+                    br
+                    .form-group 
+                        .input-group.mb-3
+                            .input-group-prepend
+                                label.input-group-text(for='camionero_id') camionero  
+                                    select#inputGroupSelect01.custom-select(name='camionero_id' required)
+                                        option.selected(value='') Seleccione el camionero
+                                            each camionero in camioneros
+                                                option(value=camionero.id)=camionero.nombre
+                    br
+                    .form-group 
+                        .input-group.mb-3
+                            .input-group-prepend
+                                label.input-group-text(for='camion_id') camion
+                                    select#inputGroupSelect01.custom-select(name='camion_id' required)
+                                        option.selected(value='') Seleccione el camion
+                                            each camion in camiones
+                                                option(value=camion.id)=camion.placa
+                                    
+                    .form-group
+                        button.btn.btn-primary(type="submit", name="agregar") Agregar
+            // Modal Footer
+            .modal-footer
+                h5 footer
+            // footer
+            p.foot.text-xs-center test
