@@ -11,20 +11,20 @@ block contenido
                 form(role='form' method='POST' action=`/editar-paquete/${Editarpaquete.id}` data-toggle = "validator")
                     .form-group
                         label(for='destinatario') destinatario
-                        input#name.form-control(type='text', placeholder='Escriba Numero del parqueo' name='destinatario' required autofocus)
+                        input#name.form-control(type='text', placeholder='Escriba Numero del parqueo' value=`${Editarpaquete.destinatario}` name='destinatario' required autofocus)
                     .form-group
                         label(for='descripcion') descripcion
-                        input#name.form-control(type='text', placeholder='Escriba Numero del parqueo' name='descripcion')
+                        input#name.form-control(type='text', placeholder='Escriba Numero del parqueo' value=`${Editarpaquete.descripcion}` name='descripcion')
                     .form-group
                         label(for='direccion') direccion
-                        input#name.form-control(type='text', placeholder='Escriba Numero del parqueo' name='direccion')
+                        input#name.form-control(type='text', placeholder='Escriba Numero del parqueo' value=`${Editarpaquete.direccion}` name='direccion')
                     br
                     .form-group 
                         .input-group.mb-3
                             .input-group-prepend
                                 label.input-group-text(for='ciudad_id') ciudad  
-                                    select#inputGroupSelect01.custom-select(name='ciudad_id' required)
-                                        option.selected(value='') Seleccione la ciudad
+                                    select#inputGroupSelect01.custom-select(name='ciudad_id'  required)
+                                        option.selected(value=`${Editarpaquete.ciudad_id}`) Seleccione la ciudad
                                             each ciudad in ciudades
                                                 option(value=ciudad.id)=ciudad.nombre
                     br
@@ -32,8 +32,8 @@ block contenido
                         .input-group.mb-3
                             .input-group-prepend
                                 label.input-group-text(for='camionero_id') camionero
-                                    select#inputGroupSelect01.custom-select(name='camionero_id' required)
-                                        option.selected(value='') Seleccione el camionero
+                                    select#inputGroupSelect01.custom-select(name='camionero_id'  required)
+                                        option.selected(value=`${Editarpaquete.camionero_id}`) Seleccione el camionero
                                             each camionero in camioneros
                                                 option(value=camionero.id)=camionero.nombre    
                     .form-group

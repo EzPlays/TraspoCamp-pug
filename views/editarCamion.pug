@@ -10,16 +10,16 @@ block  contenido
                 form(role='form' method='POST' action=`/editar-camion/${Editarcamion.id}` data-toggle="validator")
                     .form-group 
                         label(for="placa") placa camion
-                        input#name.form-control(type="text" placeholder="dijite la placa" name='placa' required autofocus)
+                        input#name.form-control(type="text" placeholder="dijite la placa" value=`${Editarcamion.placa}` name='placa' required autofocus)
                     .form-group 
                         label(for="modelo") modelo camion
-                        input#name.form-control(type="text" placeholder="dijite el modelo" name='modelo' required)
+                        input#name.form-control(type="text" placeholder="dijite el modelo" value=`${Editarcamion.modelo}` name='modelo' required)
                     .form-group 
                         label(for="potencia") potencia camion
-                        input#name.form-control(type="text" placeholder="dijite la potencia" name='potencia' required)
+                        input#name.form-control(type="text" placeholder="dijite la potencia" value=`${Editarcamion.potencia}` name='potencia' required)
                     .form-group 
                         label(for="tipo") tipo camion
-                        input#name.form-control(type="text" placeholder="dijite el tipo" name='tipo' required)
+                        input#name.form-control(type="text" placeholder="dijite el tipo" value=`${Editarcamion.tipo}` name='tipo' required)
                     button.btn.btn-primary(type="submit" name="agregar") Agregar 
             .modal-footer 
                 h5 footer 
