@@ -124,7 +124,7 @@ const btnEliminarPaquete = (id => {
           'success'
         );
         setTimeout(() => {
-              window.location = `/borrarCamion/${id}`
+              window.location = `/borrarPaquete/${id}`
           },1200);
       }
     })

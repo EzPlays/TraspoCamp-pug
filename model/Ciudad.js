@@ -11,10 +11,7 @@ const Ciudad = db.define('ciudad', {
         autoIncrement: true
     },
     nombre: DataTypes.STRING,
-    paquete_id: {
-        type : DataTypes.INTEGER.UNSIGNED, // LLAVE FORANEA DE EMPRESA
-        allowNull : false
-    }
+    
     
 },
     {

@@ -1,0 +1,21 @@
+extends layout 
+block contenido
+    div 
+        .container  
+        br
+        div 
+            if(ciudades.length)
+                table.table.tabled-bordered.table-striped.text-center.mt-2 Listado de ciudades
+                    thead 
+                        tr.bg-primary.text-white 
+                            th(scope="col")
+                                | id
+                            th(scope="col")
+                                | nombre
+                    tbody
+                        each ciudad in ciudades
+                            tr
+                                td=ciudad.id
+                                td=ciudad.nombre
+            else 
+                h1 No hay ciudades

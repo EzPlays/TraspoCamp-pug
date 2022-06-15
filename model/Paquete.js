@@ -14,10 +14,11 @@ const Paquete = db.define('paquete', {
     descripcion: DataTypes.STRING,
     direccion: DataTypes.STRING,
     camionero_id: {
-        type : DataTypes.INTEGER.UNSIGNED, // LLAVE FORANEA DE EMPRESA
-        allowNull : false
+        type : DataTypes.INTEGER, // LLAVE FORANEA DE EMPRESA
+    },
+    ciudad_id: {
+        type : DataTypes.INTEGER, // LLAVE FORANEA DE EMPRESA
     }
-    
 },
     {
         db,

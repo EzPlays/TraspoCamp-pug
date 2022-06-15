@@ -11,11 +11,11 @@ const CamiCon = db.define('camicon', {
         autoIncrement: true
     },
     camion_id: {
-        type : DataTypes.INTEGER.UNSIGNED, // LLAVE FORANEA DE EMPRESA
+        type : DataTypes.INTEGER, // LLAVE FORANEA DE EMPRESA
         allowNull : false
     },
     camionero_id: {
-        type : DataTypes.INTEGER.UNSIGNED, // LLAVE FORANEA DE EMPRESA
+        type : DataTypes.INTEGER, // LLAVE FORANEA DE EMPRESA
         allowNull : false
     }
     

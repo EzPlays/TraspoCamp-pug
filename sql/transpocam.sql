@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.1.3
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-06-2022 a las 02:13:41
--- Versión del servidor: 10.4.24-MariaDB
--- Versión de PHP: 7.4.29
+-- Tiempo de generación: 07-06-2022 a las 19:12:11
+-- Versión del servidor: 10.4.19-MariaDB
+-- Versión de PHP: 8.0.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -53,8 +53,7 @@ CREATE TABLE `camion` (
 
 INSERT INTO `camion` (`id`, `placa`, `modelo`, `potencia`, `tipo`) VALUES
 (1, '3443ADS', '2002 de carga', '50 caballos', 'de carga'),
-(3, 'aaee243', '2022 nuevo', '100 caballos', 'pa todo sirve '),
-(5, 'aaaaaaaaaa', 'wwww', 'eeee', 'rhrhrh');
+(3, 'aaee243', '2022 nuevo', '100 caballos', 'pa todo sirve ');
 
 -- --------------------------------------------------------
 
@@ -69,6 +68,14 @@ CREATE TABLE `camionero` (
   `direccion` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `camionero`
+--
+
+INSERT INTO `camionero` (`id`, `nombre`, `telefono`, `direccion`) VALUES
+(1, 'emanuel', 2147483647, 'san eduardo'),
+(2, 'janer', 2147483647, 'la paz');
+
 -- --------------------------------------------------------
 
 --
@@ -77,9 +84,18 @@ CREATE TABLE `camionero` (
 
 CREATE TABLE `ciudad` (
   `id` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL,
-  `paquete_id` int(11) NOT NULL
+  `nombre` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `ciudad`
+--
+
+INSERT INTO `ciudad` (`id`, `nombre`) VALUES
+(1, 'popayan'),
+(2, 'santander'),
+(3, 'bogota'),
+(4, 'medellín');
 
 -- --------------------------------------------------------
 
@@ -92,7 +108,8 @@ CREATE TABLE `paquete` (
   `destinatario` varchar(100) NOT NULL,
   `descripción` varchar(100) NOT NULL,
   `direccion` varchar(100) NOT NULL,
-  `camionero_id` int(11) NOT NULL
+  `camionero_id` int(11) NOT NULL,
+  `ciudad_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -123,14 +140,14 @@ ALTER TABLE `camionero`
 -- Indices de la tabla `ciudad`
 --
 ALTER TABLE `ciudad`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `paquete_id` (`paquete_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `paquete`
 --
 ALTER TABLE `paquete`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `ciudad_id` (`ciudad_id`),
   ADD KEY `camionero_id` (`camionero_id`);
 
 --
@@ -153,13 +170,13 @@ ALTER TABLE `camion`
 -- AUTO_INCREMENT de la tabla `camionero`
 --
 ALTER TABLE `camionero`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `ciudad`
 --
 ALTER TABLE `ciudad`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `paquete`
@@ -179,16 +196,11 @@ ALTER TABLE `camicon`
   ADD CONSTRAINT `camicon_ibfk_2` FOREIGN KEY (`camion_id`) REFERENCES `camion` (`id`);
 
 --
--- Filtros para la tabla `ciudad`
---
-ALTER TABLE `ciudad`
-  ADD CONSTRAINT `ciudad_ibfk_1` FOREIGN KEY (`paquete_id`) REFERENCES `paquete` (`id`);
-
---
 -- Filtros para la tabla `paquete`
 --
 ALTER TABLE `paquete`
-  ADD CONSTRAINT `paquete_ibfk_1` FOREIGN KEY (`camionero_id`) REFERENCES `camionero` (`id`);
+  ADD CONSTRAINT `paquete_ibfk_1` FOREIGN KEY (`camionero_id`) REFERENCES `camionero` (`id`),
+  ADD CONSTRAINT `paquete_ibfk_2` FOREIGN KEY (`ciudad_id`) REFERENCES `ciudad` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

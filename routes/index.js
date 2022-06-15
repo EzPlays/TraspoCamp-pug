@@ -31,12 +31,7 @@ module.exports = function () {
     router.post('/editar-camionero/:id', controlador.actualizarCamionero)
 
     //Ciudad
-    router.get('/ciudad', controlador.formulariociudad)
-    router.post('/ciudad', controlador.nuevaCiudad)
     router.get('/ver-ciudades', controlador.verCiudades)
-    router.get('/borrarCiudad/:id', controlador.borrarCiudad)
-    router.get('/editar-ciudad/:id', controlador.editarCiudad)
-    router.post('/editar-ciudad/:id', controlador.actualizarCiudad)
     
     //Paquete
     router.get('/paquete', controlador.formulariopaquete)

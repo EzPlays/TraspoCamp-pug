@@ -5,6 +5,7 @@ const Paquete = require('../model/Paquete');
 const CamiCon = require('../model/CamiCon');
 
 
+
     exports.home = (req, res) => {
         res.render('index', {
             nombrePagina : 'TransCam'
@@ -253,12 +254,6 @@ const CamiCon = require('../model/CamiCon');
 
     //Ciudad
 
-    exports.formulariociudad = (req, res) => {
-        res.render('nuevaCiudad', {
-            nombrePagina: 'nueva ciudad'
-        })
-    }
-
     exports.verCiudades = async (req, res) => {
         const ciudades = await Ciudad.findAll();
 
@@ -269,110 +264,31 @@ const CamiCon = require('../model/CamiCon');
         console.log(ciudades.length);
     }
 
-    exports.nuevaCiudad = async (req, res) => {
-        //Enviar a consola lo que el usuario escriba
-        const { nombre } = req.body;
-        const { paquete_id } = req.body;
-        let errores = [];
-
-        if (!nombre) {
-            errores.push({ 'texto': 'Agregar un numero de identificacion' })
-        }
-        //si hay errores
-        if (errores.length > 0) {
-            res.render('nuevaCiudad', {
-                nombrePagina: 'nueva Ciudad',
-                errores
-            })
-        } else {
-            const ciudad = await Ciudad.create({
-                nombre: { nombre }.nombre,
-                paquete_id: { paquete_id }.paquete_id,
-            });
-            res.redirect('/ver-ciudades');
-        }
-    }
-
-    exports.borrarCiudad = async (req, res) => {
-        try {
-            const id = req.params.id;
-            const borrarCiudad = await Ciudad.destroy({ where: { id } })
-            console.log('Ciudad borrado correctamente');
-            res.redirect('/ver-ciudades')
-        }
-        catch (err) {
-            console.log('Error al intentar borrar Ciudad');
-            res.redirect('/ver-ciudades')
-        }
-    }
-
-    exports.editarCiudad = async (req, res, next) => {
-        const id = req.params.id;
-        const Editarciudad = await Ciudad.findOne({
-            where: {
-                id: id
-            }
-        });
-        res.render('editarCiudad', {
-            nombrePagina: 'Editar ciudad',
-            Editarciudad
-        })
-    }
-
-    exports.actualizarCiudad = async (req, res, next) => {
-        const id = req.params.id;
-        const nombre = req.body.nombre;
-        const paquete_id = req.body.paquete_id;
-
-        let errores = [];
-
-        if (!nombre) {
-            errores.push({ 'texto': 'Agregar un nombre a la empresa' })
-        }
-
-        //si hay errores
-        if (errores.length > 0) {
-            res.render('nuevaCiudad', {
-                nombrePagina: 'nueva Ciudad',
-                errores
-            })
-        } else {
-            try {
-                await Ciudad.update({
-                    nombre: nombre,
-                    paquete_id: paquete_id,
-                },
-                    {
-                        where: {
-                            id: id
-                        }
-                    });
-                console.log("Ciudad actualizado correctamente");
-                res.redirect('/ver-ciudades');
-            }
-            catch (err) {
-                console.log("error al intentar actualizar Ciudad");
-                res.redirect("/ver-ciudades")
-            }
-        }
-    }
-
     ////////////////////////    
 
     //Paquete
 
-    exports.formulariopaquete = (req, res) => {
+    exports.formulariopaquete = async(req, res) => {
+        const ciudades = await Ciudad.findAll();
+        const camioneros = await Camionero.findAll();
+
         res.render('nuevoPaquete', {
-            nombrePagina: 'nuevo Paquete'
+            nombrePagina: 'nuevo Paquete',
+            ciudades,
+            camioneros
         })
     }
 
     exports.verPaquetes = async (req, res) => {
         const paquetes = await Paquete.findAll();
+        const ciudades = await Ciudad.findAll();
+        const camioneros = await Camionero.findAll();
 
         res.render('verPaquetes', {
             nombrePagina: 'Lista de Paquetes',
-            paquetes
+            paquetes,
+            ciudades,
+            camioneros
         })
         console.log(paquetes.length);
     }
@@ -383,6 +299,8 @@ const CamiCon = require('../model/CamiCon');
         const { descripcion } = req.body;
         const { direccion } = req.body;
         const { camionero_id } = req.body;
+        const { ciudad_id } = req.body;
+
         let errores = [];
 
         if (!destinatario) {
@@ -400,6 +318,7 @@ const CamiCon = require('../model/CamiCon');
                 descripcion: { descripcion }.descripcion,
                 direccion: { direccion }.direccion,
                 camionero_id: { camionero_id }.camionero_id,
+                ciudad_id: { ciudad_id }.ciudad_id,
             });
             res.redirect('/ver-paquetes');
         }
@@ -420,6 +339,8 @@ const CamiCon = require('../model/CamiCon');
 
     exports.editarPaquete = async (req, res, next) => {
         const id = req.params.id;
+        const ciudades = await Ciudad.findAll();
+        const camioneros = await Camionero.findAll();
         const Editarpaquete = await Paquete.findOne({
             where: {
                 id: id
@@ -427,6 +348,8 @@ const CamiCon = require('../model/CamiCon');
         });
         res.render('editarPaquete', {
             nombrePagina: 'Editar paquete',
+            ciudades,
+            camioneros,
             Editarpaquete
         })
     }
@@ -437,6 +360,7 @@ const CamiCon = require('../model/CamiCon');
         const descripcion = req.body.descripcion;
         const direccion = req.body.direccion;
         const camionero_id = req.body.camionero_id;
+        const ciudad_id = req.body.ciudad_id;
 
         let errores = [];
 
@@ -457,6 +381,7 @@ const CamiCon = require('../model/CamiCon');
                     descripcion: descripcion,
                     direccion: direccion,
                     camionero_id: camionero_id,
+                    ciudad_id: ciudad_id
                 },
                     {
                         where: {

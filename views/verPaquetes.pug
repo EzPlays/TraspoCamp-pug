@@ -1,0 +1,45 @@
+extends layout 
+block contenido
+    div 
+        .container  
+        br
+        div 
+            if(paquetes.length)
+                table.table.tabled-bordered.table-striped.text-center.mt-2 Listado de paquetes
+                    thead 
+                        tr.bg-primary.text-white 
+                            th(scope="col")
+                                | id
+                            th(scope="col")
+                                | destinatario
+                            th(scope="col")
+                                | descripcion
+                            th(scope="col")
+                                | direccion
+                            th(scope="col")
+                                | ciudad
+                            th(scope="col")
+                                | camionero 
+                            th(scope="col")
+                                | opciones
+                            
+                    tbody
+                        each paquete in paquetes
+                            tr
+                            td=paquete.id
+                            td=paquete.destinatario
+                            td=paquete.descripcion
+                            td=paquete.direccion
+                            each ciudad in ciudades
+                                if(paquete.ciudad_id == ciudad.id)    
+                                    td=ciudad.nombre
+                            each camionero in camioneros
+                                if(paquete.camionero_id == camionero.id)    
+                                    td=camionero.nombre
+                            td  
+                                    a.btn.btn-warning.mt-2(href='/editar-paquete/'+ `${paquete.id}`)
+                                        i.bx.bxs-pencil.bx-xs(<='' i='')
+                                    a.btn.btn-danger.mt-2(onclick=`btnEliminarPaquete(${paquete.id})` id='eliminar-camion' type='button')
+                                        i.bx.bxs-trash-alt.bx-xs(<='' i='')
+            else 
+                h1 no hay paquetes
