@@ -15,16 +15,13 @@ html(lang="en")
         title #{nombrePagina}
     body 
         header.barra 
-            h1 TranspoCam
+            a(href="/") TranspoCam
             a(href="#") cerrar sesion
         main.contenedor 
             aside.contenedor-proyectos 
                 .panel.lista-proyectos 
                     div(id="menu")
                         ul#proyectos.proyectos
-                            li(class="has-sub") 
-                                a(title="" href="/" class="boton") Inicio
-                            br
                             li(class="has-sub") 
                                 a(title="" href="/camiones" class="boton") Nuevo Camion
                             li(class="has-sub") 

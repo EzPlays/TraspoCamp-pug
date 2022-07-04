@@ -106,7 +106,7 @@ INSERT INTO `ciudad` (`id`, `nombre`) VALUES
 CREATE TABLE `paquete` (
   `id` int(11) NOT NULL,
   `destinatario` varchar(100) NOT NULL,
-  `descripción` varchar(100) NOT NULL,
+  `descripcion` varchar(100) NOT NULL,
   `direccion` varchar(100) NOT NULL,
   `camionero_id` int(11) NOT NULL,
   `ciudad_id` int(11) NOT NULL

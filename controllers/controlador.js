@@ -6,502 +6,501 @@ const CamiCon = require('../model/CamiCon');
 
 
 
-    exports.home = (req, res) => {
-        res.render('index', {
-            nombrePagina : 'TransCam'
-        });
+exports.home = (req, res) => {
+    res.render('index', {
+        nombrePagina: 'TranspoCam'
+    });
+}
+
+
+//camion
+
+exports.formulariocamion = (req, res) => {
+    res.render('nuevoCamion', {
+        nombrePagina: 'nuevo camion'
+    })
+}
+
+exports.verCamion = async (req, res) => {
+    const camion = await Camion.findAll();
+
+    res.render('verCamiones', {
+        nombrePagina: 'Lista de Camiones',
+        camion
+    })
+    console.log(camion.length);
+}
+
+exports.nuevoCamion = async (req, res) => {
+    //Enviar a consola lo que el usuario escriba
+    const { placa } = req.body;
+    const { modelo } = req.body;
+    const { potencia } = req.body;
+    const { tipo } = req.body;
+    let errores = [];
+
+    if (!placa) {
+        errores.push({ 'texto': 'Agregar un numero de identificacion' })
     }
-
-
-    //camion
-
-    exports.formulariocamion = (req, res) => {
+    //si hay errores
+    if (errores.length > 0) {
         res.render('nuevoCamion', {
-            nombrePagina: 'nuevo camion'
+            nombrePagina: 'nuevo Camion',
+            errores
         })
+    } else {
+        const camion = await Camion.create({
+            placa: { placa }.placa,
+            modelo: { modelo }.modelo,
+            potencia: { potencia }.potencia,
+            tipo: { tipo }.tipo
+        });
+        res.redirect('/ver-camiones');
     }
+}
 
-    exports.verCamion = async (req, res) => {
-        const camion = await Camion.findAll();
-
-        res.render('verCamiones', {
-            nombrePagina: 'Lista de Camiones',
-            camion
-        })
-        console.log(camion.length);
+exports.borrarCamion = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const borrarCamion = await Camion.destroy({ where: { id } })
+        console.log('Camion borrado correctamente');
+        res.redirect('/ver-camiones')
     }
+    catch (err) {
+        console.log('Error al intentar borrar Camion');
+        res.redirect('/ver-camiones')
+    }
+}
 
-    exports.nuevoCamion = async (req, res) => {
-        //Enviar a consola lo que el usuario escriba
-        const { placa } = req.body;
-        const { modelo } = req.body;
-        const { potencia } = req.body;
-        const { tipo } = req.body;
-        let errores = [];
-
-        if (!placa) {
-            errores.push({ 'texto': 'Agregar un numero de identificacion' })
+exports.editarCamion = async (req, res, next) => {
+    const id = req.params.id;
+    const Editarcamion = await Camion.findOne({
+        where: {
+            id: id
         }
-        //si hay errores
-        if (errores.length > 0) {
-            res.render('nuevoCamion', {
-                nombrePagina: 'nuevo Camion',
-                errores
-            })
-        } else {
-            const camion = await Camion.create({
-                placa: { placa }.placa,
-                modelo: { modelo }.modelo,
-                potencia: { potencia }.potencia,
-                tipo: { tipo }.tipo
-            });
+    });
+    res.render('editarCamion', {
+        nombrePagina: 'Editar Camion',
+        Editarcamion
+    })
+}
+
+exports.actualizarCamion = async (req, res, next) => {
+    const id = req.params.id;
+    const placa = req.body.placa;
+    const modelo = req.body.modelo;
+    const potencia = req.body.potencia;
+    const tipo = req.body.tipo;
+
+    let errores = [];
+
+    if (!placa) {
+        errores.push({ 'texto': 'Agregar un nombre a la empresa' })
+    }
+
+    //si hay errores
+    if (errores.length > 0) {
+        res.render('nuevoCamion', {
+            nombrePagina: 'nuevo Camion',
+            errores
+        })
+    } else {
+        try {
+            await Camion.update({
+                placa: placa,
+                modelo: modelo,
+                potencia: potencia,
+                tipo: tipo
+            },
+                {
+                    where: {
+                        id: id
+                    }
+                });
+            console.log("Camion actualizado correctamente");
             res.redirect('/ver-camiones');
         }
-    }
-
-    exports.borrarCamion = async (req, res) => {
-        try {
-            const id = req.params.id;
-            const borrarCamion = await Camion.destroy({ where: { id } })
-            console.log('Camion borrado correctamente');
-            res.redirect('/ver-camiones')
-        }
         catch (err) {
-            console.log('Error al intentar borrar Camion');
-            res.redirect('/ver-camiones')
+            console.log("error al intentar actualizar Camion");
+            res.redirect("/ver-camiones")
         }
     }
+}
 
-    exports.editarCamion = async (req, res, next) => {
-        const id = req.params.id;
-        const Editarcamion = await Camion.findOne({
-            where: {
-                id: id
-            }
-        });
-        res.render('editarCamion', {
-            nombrePagina: 'Editar Camion',
-            Editarcamion
-        })
+////////////////////////////////////////////////////////////////
+
+//camionero
+
+exports.formulariocamionero = (req, res) => {
+    res.render('nuevoCamionero', {
+        nombrePagina: 'nuevo camionero'
+    })
+}
+
+exports.verCamioneros = async (req, res) => {
+    const camionero = await Camionero.findAll();
+
+    res.render('verCamioneros', {
+        nombrePagina: 'Lista de Camioneros',
+        camionero
+    })
+    console.log(camionero.length);
+}
+
+exports.nuevoCamionero = async (req, res) => {
+    //Enviar a consola lo que el usuario escriba
+    const { nombre } = req.body;
+    const { telefono } = req.body;
+    const { direccion } = req.body;
+    let errores = [];
+
+    if (!nombre) {
+        errores.push({ 'texto': 'Agregar un numero de identificacion' })
     }
-
-    exports.actualizarCamion = async (req, res, next) => {
-        const id = req.params.id;
-        const placa = req.body.placa;
-        const modelo = req.body.modelo;
-        const potencia = req.body.potencia;
-        const tipo = req.body.tipo;
-
-        let errores = [];
-
-        if (!placa) {
-            errores.push({ 'texto': 'Agregar un nombre a la empresa' })
-        }
-
-        //si hay errores
-        if (errores.length > 0) {
-            res.render('nuevoCamion', {
-                nombrePagina: 'nuevo Camion',
-                errores
-            })
-        } else {
-            try {
-                await Camion.update({
-                    placa: placa,
-                    modelo: modelo,
-                    potencia: potencia,
-                    tipo: tipo
-                },
-                    {
-                        where: {
-                            id: id
-                        }
-                    });
-                console.log("Camion actualizado correctamente");
-                res.redirect('/ver-camiones');
-            }
-            catch (err) {
-                console.log("error al intentar actualizar Camion");
-                res.redirect("/ver-camiones")
-            }
-        }
-    }
-
-    ////////////////////////////////////////////////////////////////
-
-    //camionero
-
-    exports.formulariocamionero = (req, res) => {
+    //si hay errores
+    if (errores.length > 0) {
         res.render('nuevoCamionero', {
-            nombrePagina: 'nuevo camionero'
+            nombrePagina: 'nuevo Camionero',
+            errores
         })
+    } else {
+        const camionero = await Camionero.create({
+            nombre: { nombre }.nombre,
+            telefono: { telefono }.telefono,
+            direccion: { direccion }.direccion
+        });
+        res.redirect('/ver-camioneros');
     }
+}
 
-    exports.verCamioneros = async (req, res) => {
-        const camionero = await Camionero.findAll();
-
-        res.render('verCamioneros', {
-            nombrePagina: 'Lista de Camioneros',
-            camionero
-        })
-        console.log(camionero.length);
+exports.borrarCamionero = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const borrarCamionero = await Camionero.destroy({ where: { id } })
+        console.log('Camionero borrado correctamente');
+        res.redirect('/ver-camioneros')
     }
+    catch (err) {
+        console.log('Error al intentar borrar Camionero');
+        res.redirect('/ver-camioneros')
+    }
+}
 
-    exports.nuevoCamionero = async (req, res) => {
-        //Enviar a consola lo que el usuario escriba
-        const { nombre } = req.body;
-        const { telefono } = req.body;
-        const { direccion } = req.body;
-        let errores = [];
-
-        if (!nombre) {
-            errores.push({ 'texto': 'Agregar un numero de identificacion' })
+exports.editarCamionero = async (req, res, next) => {
+    const id = req.params.id;
+    const Editarcamionero = await Camionero.findOne({
+        where: {
+            id: id
         }
-        //si hay errores
-        if (errores.length > 0) {
-            res.render('nuevoCamionero', {
-                nombrePagina: 'nuevo Camionero',
-                errores
-            })
-        } else {
-            const camionero = await Camionero.create({
-                nombre: { nombre }.nombre,
-                telefono: { telefono }.telefono,
-                direccion: { direccion }.direccion
-            });
+    });
+    res.render('editarCamionero', {
+        nombrePagina: 'Editar Camionero',
+        Editarcamionero
+    })
+}
+
+exports.actualizarCamionero = async (req, res, next) => {
+    const id = req.params.id;
+    const nombre = req.body.nombre;
+    const telefono = req.body.telefono;
+    const direccion = req.body.direccion;
+
+    let errores = [];
+
+    if (!nombre) {
+        errores.push({ 'texto': 'Agregar un nombre a la empresa' })
+    }
+
+    //si hay errores
+    if (errores.length > 0) {
+        res.render('nuevoCamionero', {
+            nombrePagina: 'nuevo Camionero',
+            errores
+        })
+    } else {
+        try {
+            await Camionero.update({
+                nombre: nombre,
+                telefono: telefono,
+                direccion: direccion,
+            },
+                {
+                    where: {
+                        id: id
+                    }
+                });
+            console.log("Camionero actualizado correctamente");
             res.redirect('/ver-camioneros');
         }
-    }
-
-    exports.borrarCamionero = async (req, res) => {
-        try {
-            const id = req.params.id;
-            const borrarCamionero = await Camionero.destroy({ where: { id } })
-            console.log('Camionero borrado correctamente');
-            res.redirect('/ver-camioneros')
-        }
         catch (err) {
-            console.log('Error al intentar borrar Camionero');
-            res.redirect('/ver-camioneros')
+            console.log("error al intentar actualizar Camionero");
+            res.redirect("/ver-camioneros")
         }
     }
+}
 
-    exports.editarCamionero = async (req, res, next) => {
-        const id = req.params.id;
-        const Editarcamionero = await Camionero.findOne({
-            where: {
-                id: id
-            }
-        });
-        res.render('editarCamionero', {
-            nombrePagina: 'Editar Camionero',
-            Editarcamionero
-        })
+////////////////////////////////////////////////////////////////
+
+//Ciudad
+
+exports.verCiudades = async (req, res) => {
+    const ciudades = await Ciudad.findAll();
+
+    res.render('verCiudades', {
+        nombrePagina: 'Lista de Ciudades',
+        ciudades
+    })
+    console.log(ciudades.length);
+}
+
+////////////////////////    
+
+//Paquete
+
+exports.formulariopaquete = async (req, res) => {
+    const ciudades = await Ciudad.findAll();
+    const camioneros = await Camionero.findAll();
+
+    res.render('nuevoPaquete', {
+        nombrePagina: 'nuevo Paquete',
+        ciudades,
+        camioneros
+    })
+}
+
+exports.verPaquetes = async (req, res) => {
+    const paquetes = await Paquete.findAll();
+    const ciudades = await Ciudad.findAll();
+    const camioneros = await Camionero.findAll();
+
+    res.render('verPaquetes', {
+        nombrePagina: 'Lista de Paquetes',
+        paquetes,
+        ciudades,
+        camioneros
+    })
+    console.log(paquetes.length);
+}
+
+exports.nuevoPaquete = async (req, res) => {
+    //Enviar a consola lo que el usuario escriba
+    const { destinatario } = req.body;
+    const { descripcion } = req.body;
+    const { direccion } = req.body;
+    const { camionero_id } = req.body;
+    const { ciudad_id } = req.body;
+
+    let errores = [];
+
+    if (!destinatario) {
+        errores.push({ 'texto': 'Agregar un numero de identificacion' })
     }
-
-    exports.actualizarCamionero = async (req, res, next) => {
-        const id = req.params.id;
-        const nombre = req.body.nombre;
-        const telefono = req.body.telefono;
-        const direccion = req.body.direccion;
-
-        let errores = [];
-
-        if (!nombre) {
-            errores.push({ 'texto': 'Agregar un nombre a la empresa' })
-        }
-
-        //si hay errores
-        if (errores.length > 0) {
-            res.render('nuevoCamionero', {
-                nombrePagina: 'nuevo Camionero',
-                errores
-            })
-        } else {
-            try {
-                await Camionero.update({
-                    nombre: nombre,
-                    telefono: telefono,
-                    direccion: direccion,
-                },
-                    {
-                        where: {
-                            id: id
-                        }
-                    });
-                console.log("Camionero actualizado correctamente");
-                res.redirect('/ver-camioneros');
-            }
-            catch (err) {
-                console.log("error al intentar actualizar Camionero");
-                res.redirect("/ver-camioneros")
-            }
-        }
-    }
-
-    ////////////////////////////////////////////////////////////////
-
-    //Ciudad
-
-    exports.verCiudades = async (req, res) => {
-        const ciudades = await Ciudad.findAll();
-
-        res.render('verCiudades', {
-            nombrePagina: 'Lista de Ciudades',
-            ciudades
-        })
-        console.log(ciudades.length);
-    }
-
-    ////////////////////////    
-
-    //Paquete
-
-    exports.formulariopaquete = async(req, res) => {
-        const ciudades = await Ciudad.findAll();
-        const camioneros = await Camionero.findAll();
-
+    //si hay errores
+    if (errores.length > 0) {
         res.render('nuevoPaquete', {
             nombrePagina: 'nuevo Paquete',
-            ciudades,
-            camioneros
+            errores
         })
+    } else {
+        const paquete = await Paquete.create({
+            destinatario: { destinatario }.destinatario,
+            descripcion: { descripcion }.descripcion,
+            direccion: { direccion }.direccion,
+            camionero_id: { camionero_id }.camionero_id,
+            ciudad_id: { ciudad_id }.ciudad_id,
+        });
+        res.redirect('/ver-paquetes');
     }
+}
 
-    exports.verPaquetes = async (req, res) => {
-        const paquetes = await Paquete.findAll();
-        const ciudades = await Ciudad.findAll();
-        const camioneros = await Camionero.findAll();
-
-        res.render('verPaquetes', {
-            nombrePagina: 'Lista de Paquetes',
-            paquetes,
-            ciudades,
-            camioneros
-        })
-        console.log(paquetes.length);
+exports.borrarPaquete = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const borrarPaqute = await Paquete.destroy({ where: { id } })
+        console.log('Paquete borrado correctamente');
+        res.redirect('/ver-paquetes')
     }
+    catch (err) {
+        console.log('Error al intentar borrar Paquete');
+        res.redirect('/ver-paquetes')
+    }
+}
 
-    exports.nuevoPaquete = async (req, res) => {
-        //Enviar a consola lo que el usuario escriba
-        const { destinatario } = req.body;
-        const { descripcion } = req.body;
-        const { direccion } = req.body;
-        const { camionero_id } = req.body;
-        const { ciudad_id } = req.body;
-
-        let errores = [];
-
-        if (!destinatario) {
-            errores.push({ 'texto': 'Agregar un numero de identificacion' })
+exports.editarPaquete = async (req, res, next) => {
+    const id = req.params.id;
+    const ciudades = await Ciudad.findAll();
+    const camioneros = await Camionero.findAll();
+    const Editarpaquete = await Paquete.findOne({
+        where: {
+            id: id
         }
-        //si hay errores
-        if (errores.length > 0) {
-            res.render('nuevoPaquete', {
-                nombrePagina: 'nuevo Paquete',
-                errores
-            })
-        } else {
-            const paquete = await Paquete.create({
-                destinatario: { destinatario }.destinatario,
-                descripcion: { descripcion }.descripcion,
-                direccion: { direccion }.direccion,
-                camionero_id: { camionero_id }.camionero_id,
-                ciudad_id: { ciudad_id }.ciudad_id,
-            });
+    });
+    res.render('editarPaquete', {
+        nombrePagina: 'Editar paquete',
+        ciudades,
+        camioneros,
+        Editarpaquete
+    })
+}
+
+exports.actualizarPaquete = async (req, res, next) => {
+    const id = req.params.id;
+    const destinatario = req.body.destinatario;
+    const descripcion = req.body.descripcion;
+    const direccion = req.body.direccion;
+    const camionero_id = req.body.camionero_id;
+    const ciudad_id = req.body.ciudad_id;
+
+    let errores = [];
+
+    if (!destinatario) {
+        errores.push({ 'texto': 'Agregar un nombre a la empresa' })
+    }
+
+    //si hay errores
+    if (errores.length > 0) {
+        res.render('nuevoPaquete', {
+            nombrePagina: 'nuevo Paquete',
+            errores
+        })
+    } else {
+        try {
+            await Paquete.update({
+                destinatario: destinatario,
+                descripcion: descripcion,
+                direccion: direccion,
+                camionero_id: camionero_id,
+                ciudad_id: ciudad_id
+            },
+                {
+                    where: {
+                        id: id
+                    }
+                });
+            console.log("Paquete actualizado correctamente");
             res.redirect('/ver-paquetes');
         }
-    }
-
-    exports.borrarPaquete = async (req, res) => {
-        try {
-            const id = req.params.id;
-            const borrarPaqute = await Paquete.destroy({ where: { id } })
-            console.log('Paquete borrado correctamente');
-            res.redirect('/ver-paquetes')
-        }
         catch (err) {
-            console.log('Error al intentar borrar Paquete');
-            res.redirect('/ver-paquetes')
+            console.log("error al intentar actualizar Ciudad");
+            res.redirect("/ver-paquetes")
         }
     }
+}
 
-    exports.editarPaquete = async (req, res, next) => {
-        const id = req.params.id;
-        const ciudades = await Ciudad.findAll();
-        const camioneros = await Camionero.findAll();
-        const Editarpaquete = await Paquete.findOne({
-            where: {
-                id: id
-            }
-        });
-        res.render('editarPaquete', {
-            nombrePagina: 'Editar paquete',
-            ciudades,
-            camioneros,
-            Editarpaquete
-        })
+//CamiCon
+exports.formularioCamicon = async (req, res) => {
+    const camiones = await Camion.findAll();
+    const camioneros = await Camionero.findAll();
+
+    res.render('nuevoCamicon', {
+        nombrePagina: 'nuevo Camionero_camion',
+        camiones,
+        camioneros
+    })
+}
+
+exports.verCamicon = async (req, res) => {
+    const camicons = await CamiCon.findAll();
+    const camiones = await Camion.findAll();
+    const camioneros = await Camionero.findAll();
+
+    res.render('verCamicon', {
+        nombrePagina: 'Lista de Camionero_camion',
+        camicons,
+        camiones,
+        camioneros
+    });
+}
+
+exports.nuevoCamicon = async (req, res) => {
+    //Enviar a consola lo que el usuario escriba
+    const { camionero_id } = req.body;
+    const { camion_id } = req.body;
+
+    let errores = [];
+
+    if (!camionero_id) {
+        errores.push({ 'texto': 'Agregar un numero de identificacion' })
     }
-
-    exports.actualizarPaquete = async (req, res, next) => {
-        const id = req.params.id;
-        const destinatario = req.body.destinatario;
-        const descripcion = req.body.descripcion;
-        const direccion = req.body.direccion;
-        const camionero_id = req.body.camionero_id;
-        const ciudad_id = req.body.ciudad_id;
-
-        let errores = [];
-
-        if (!destinatario) {
-            errores.push({ 'texto': 'Agregar un nombre a la empresa' })
-        }
-
-        //si hay errores
-        if (errores.length > 0) {
-            res.render('nuevoPaquete', {
-                nombrePagina: 'nuevo Paquete',
-                errores
-            })
-        } else {
-            try {
-                await Paquete.update({
-                    destinatario: destinatario,
-                    descripcion: descripcion,
-                    direccion: direccion,
-                    camionero_id: camionero_id,
-                    ciudad_id: ciudad_id
-                },
-                    {
-                        where: {
-                            id: id
-                        }
-                    });
-                console.log("Paquete actualizado correctamente");
-                res.redirect('/ver-paquetes');
-            }
-            catch (err) {
-                console.log("error al intentar actualizar Ciudad");
-                res.redirect("/ver-paquetes")
-            }
-        }
-    }
-
-    //CamiCon
-    exports.formularioCamicon = async (req, res) => {
-        const camiones = await Camion.findAll();
-        const camioneros = await Camionero.findAll();
-
+    //si hay errores
+    if (errores.length > 0) {
         res.render('nuevoCamicon', {
             nombrePagina: 'nuevo Camionero_camion',
-            camiones,
-            camioneros
+            errores
         })
-    }
-
-    exports.verCamicon = async (req, res) => {
-        const camicons = await CamiCon.findAll();
-        const camiones = await Camion.findAll();
-        const camioneros = await Camionero.findAll();
-
-        res.render('verCamicon', {
-            nombrePagina: 'Lista de Camionero_camion',
-            camicons,
-            camiones,
-            camioneros
+    } else {
+        const camicon = await CamiCon.create({
+            camionero_id: { camionero_id }.camionero_id,
+            camion_id: { camion_id }.camion_id
         });
+        res.redirect('/ver-camicon');
+    }
+}
+
+exports.borrarCamicon = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const borrarCamicon = await CamiCon.destroy({ where: { id } })
+        console.log('Camionero_camion borrado correctamente');
+        res.redirect('/ver-camicon')
+    }
+    catch (err) {
+        console.log('Error al intentar borrar Camionero_camion');
+        res.redirect('/ver-camicon')
+    }
+}
+
+exports.editarCamicon = async (req, res, next) => {
+    const id = req.params.id;
+    const camiones = await Camion.findAll();
+    const camioneros = await Camionero.findAll();
+    const Editarcamicon = await CamiCon.findOne({
+        where: {
+            id: id
+        }
+    });
+    res.render('editarCamicon', {
+        nombrePagina: 'Editar camicon',
+        camiones,
+        camioneros,
+        Editarcamicon
+    })
+}
+
+exports.actualizarCamicon = async (req, res, next) => {
+    const id = req.params.id;
+    const camionero_id = req.body.camionero_id;
+    const camion_id = req.body.camion_id;
+
+    let errores = [];
+
+    if (!camionero_id) {
+        errores.push({ 'texto': 'Agregar un nombre a la empresa' })
     }
 
-    exports.nuevoCamicon = async (req, res) => {
-        //Enviar a consola lo que el usuario escriba
-        const { camionero_id } = req.body;
-        const { camion_id } = req.body;
-        console.log("*******************************************************",camionero_id);
-
-        let errores = [];
-
-        if (!camionero_id) {
-            errores.push({ 'texto': 'Agregar un numero de identificacion' })
-        }
-        //si hay errores
-        if (errores.length > 0) {
-            res.render('nuevoCamicon', {
-                nombrePagina: 'nuevo Camionero_camion',
-                errores
-            })
-        } else {
-            const camicon = await CamiCon.create({
-                camionero_id: { camionero_id }.camionero_id,
-                camion_id: { camion_id }.camion_id    
-            });
+    //si hay errores
+    if (errores.length > 0) {
+        res.render('nuevoCamicon', {
+            nombrePagina: 'nuevo Camionero_camion',
+            errores
+        })
+    } else {
+        try {
+            await CamiCon.update({
+                camionero_id: camionero_id,
+                camion_id: camion_id
+            },
+                {
+                    where: {
+                        id: id
+                    }
+                });
+            console.log("Camionero_camion actualizado correctamente");
             res.redirect('/ver-camicon');
         }
-    }
-
-    exports.borrarCamicon = async (req, res) => {
-        try {
-            const id = req.params.id;
-            const borrarCamicon = await CamiCon.destroy({ where: { id } })
-            console.log('Camionero_camion borrado correctamente');
-            res.redirect('/ver-camicon')
-        }
         catch (err) {
-            console.log('Error al intentar borrar Camionero_camion');
-            res.redirect('/ver-camicon')
+            console.log("error al intentar actualizar Camionero_camion");
+            res.redirect("/ver-camicon")
         }
     }
-
-    exports.editarCamicon = async (req, res, next) => {
-        const id = req.params.id;
-        const camiones = await Camion.findAll();
-        const camioneros = await Camionero.findAll();
-        const Editarcamicon = await CamiCon.findOne({
-            where: {
-                id: id
-            }
-        });
-        res.render('editarCamicon', {
-            nombrePagina: 'Editar camicon',
-            camiones,
-            camioneros,
-            Editarcamicon
-        })
-    }
-
-    exports.actualizarCamicon = async (req, res, next) => {
-        const id = req.params.id;
-        const camionero_id = req.body.camionero_id;
-        const camion_id = req.body.camion_id;
-
-        let errores = [];
-
-        if (!camionero_id) {
-            errores.push({ 'texto': 'Agregar un nombre a la empresa' })
-        }
-
-        //si hay errores
-        if (errores.length > 0) {
-            res.render('nuevoCamicon', {
-                nombrePagina: 'nuevo Camionero_camion',
-                errores
-            })
-        } else {
-            try {
-                await CamiCon.update({
-                    camionero_id: camionero_id,
-                    camion_id: camion_id
-                },
-                    {
-                        where: {
-                            id: id
-                        }
-                    });
-                console.log("Camionero_camion actualizado correctamente");
-                res.redirect('/ver-camicon');
-            }
-            catch (err) {
-                console.log("error al intentar actualizar Camionero_camion");
-                res.redirect("/ver-camicon")
-            }
-        }
-    }
+}

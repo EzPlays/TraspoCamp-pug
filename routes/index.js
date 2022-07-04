@@ -44,6 +44,7 @@ module.exports = function () {
     router.get('/editar-camicon/:id', controlador.editarCamicon)
     router.post('/editar-camicon/:id', controlador.actualizarCamicon)
 
+
     return router;
     
 }
